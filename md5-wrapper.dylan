@@ -22,7 +22,6 @@ end;
 
 define function md5 (input :: <byte-string>) => (result :: <byte-vector>)
   let ctx = init-md5();
-  format-out("barffff\n");
   update-md5(ctx, as(<C-string>, input), input.size);
   let res = make(<byte-vector>, size: 16);
   with-stack-structure (hash :: <C-string>, size: 16, fill: ' ')
@@ -34,6 +33,7 @@ define function md5 (input :: <byte-string>) => (result :: <byte-vector>)
   res;
 end;
 
+/*
 define function main ()
   let arg = application-arguments()[0];
   let md = md5(arg);
@@ -45,4 +45,4 @@ define function main ()
 end;
 
 main();
-
+*/
