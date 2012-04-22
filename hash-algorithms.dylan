@@ -18,6 +18,7 @@ end;
 define method hexdigest (digest :: <byte-vector>)
  => (hexdigest :: <byte-string>)
   reduce1(concatenate,
-          map-as(<vector>, rcurry(integer-to-string, base:, 16), digest))
+          map-as(<vector>,
+                 rcurry(integer-to-string, base:, 16, size:, 2), digest))
 end;
 
