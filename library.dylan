@@ -6,8 +6,19 @@ define library hash-algorithms
   use io;
   use c-ffi;
 
-  export md5;
+  export hash-algorithms, md5;
 end library;
+
+define module hash-algorithms
+  use dylan;
+  use common-dylan, import: { integer-to-string, <byte-vector> };
+
+  export
+    <hash>, context, context-setter,
+    digest-size, block-size,
+    update, digest,
+    hexdigest;
+end;
 
 define module md5
   use dylan;
@@ -15,6 +26,7 @@ define module md5
   use dylan-extensions, import: { <byte> };
   use format-out;
   use c-ffi;
+  use hash-algorithms;
 
-  export md5;
+  export <md5>, md5;
 end module;

@@ -20,29 +20,48 @@ define C-function final-md5
   c-name: "MD5_Final"
 end;
 
-define function md5 (input :: <byte-string>) => (result :: <byte-vector>)
+define class <md5> (<hash>)
+  inherited /* constant each-subclass */ slot digest-size /* :: <integer> */ = 16;
+  inherited /* constant each-subclass */ slot block-size /* :: <integer> */ = 64;
+end;
+
+define method make (class == <md5>, #next next-method,
+                    #rest rest, #key, #all-keys) => (hash :: <md5>)
+  let result = next-method();
   let ctx = init-md5();
-  update-md5(ctx, as(<C-string>, input), input.size);
+  result.context := ctx;
+  result
+end;
+
+define method update (hash :: <md5>, input :: <byte-string>) => ()
+  update-md5(hash.context, as(<C-string>, input), input.size)
+end;
+
+define method digest (hash :: <md5>) => (result :: <byte-vector>)
   let res = make(<byte-vector>, size: 16);
-  with-stack-structure (hash :: <C-string>, size: 16, fill: ' ')
-    final-md5(hash, ctx);
-    for (x in hash, i from 0)
+  with-stack-structure (c-hash :: <C-string>, size: 16, fill: ' ')
+    final-md5(c-hash, hash.context);
+    for (x in c-hash, i from 0)
       res[i] := as(<byte>, x);
     end;
   end;
   res;
 end;
 
+define function md5 (input :: <byte-string>) => (result :: <byte-vector>)
+  let ctx = make(<md5>);
+  update(ctx, input);
+  digest(ctx)
+end;
+
 /*
 define function main ()
   let arg = application-arguments()[0];
   let md = md5(arg);
-  let r = "";
-  for (x in md)
-    r := concatenate(r, integer-to-string(x, base: 16))
-  end;
-  format-out("MD5(%s): %s\n", arg, r)
+  format-out("MD5(%s): %s\n", arg, hexdigest(md))
 end;
 
 main();
+
 */
+
