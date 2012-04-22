@@ -3,4 +3,4 @@ executable: hash-algorithms
 files: library
   hash-algorithms
   md5-wrapper
-c-source-files: md5.c
+c-source-files: md5.c sha1.c

@@ -6,7 +6,7 @@ define library hash-algorithms
   use io;
   use c-ffi;
 
-  export hash-algorithms, md5;
+  export hash-algorithms, md5, sha1;
 end library;
 
 define module hash-algorithms
@@ -30,3 +30,15 @@ define module md5
 
   export <md5>, md5;
 end module;
+
+define module sha1
+  use dylan;
+  use common-dylan, exclude: { format-to-string };
+  use dylan-extensions, import: { <byte> };
+  use format-out;
+  use c-ffi;
+  use hash-algorithms;
+
+  export <sha1>, sha1;
+end module;
+
