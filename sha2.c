@@ -31,6 +31,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <string.h>	/* memcpy()/memset() or bcopy()/bzero() */
 #include <assert.h>	/* assert() */
 
@@ -769,13 +770,15 @@ char* SHA256_Data(const sha2_byte* data, size_t len, char digest[SHA256_DIGEST_S
 
 
 /*** SHA-512: *********************************************************/
-void SHA512_Init(SHA512_CTX* context) {
+SHA512_CTX* SHA512_Init() {
+	SHA512_CTX* context = malloc(sizeof(SHA512_CTX));
 	if (context == (SHA512_CTX*)0) {
 		return;
 	}
 	MEMCPY_BCOPY(context->state, sha512_initial_hash_value, SHA512_DIGEST_LENGTH);
 	MEMSET_BZERO(context->buffer, SHA512_BLOCK_LENGTH);
 	context->bitcount[0] = context->bitcount[1] =  0;
+	return context;
 }
 
 #ifdef SHA2_UNROLL_TRANSFORM
@@ -1063,6 +1066,7 @@ void SHA512_Final(sha2_byte digest[], SHA512_CTX* context) {
 
 	/* Zero out state data */
 	MEMSET_BZERO(context, sizeof(SHA512_CTX));
+	free(context);
 }
 
 char *SHA512_End(SHA512_CTX* context, char buffer[]) {
@@ -1098,13 +1102,15 @@ char* SHA512_Data(const sha2_byte* data, size_t len, char digest[SHA512_DIGEST_S
 
 
 /*** SHA-384: *********************************************************/
-void SHA384_Init(SHA384_CTX* context) {
+SHA384_CTX* SHA384_Init() {
+	SHA384_CTX* context = malloc(sizeof(SHA384_CTX));
 	if (context == (SHA384_CTX*)0) {
 		return;
 	}
 	MEMCPY_BCOPY(context->state, sha384_initial_hash_value, SHA512_DIGEST_LENGTH);
 	MEMSET_BZERO(context->buffer, SHA384_BLOCK_LENGTH);
 	context->bitcount[0] = context->bitcount[1] = 0;
+        return context;
 }
 
 void SHA384_Update(SHA384_CTX* context, const sha2_byte* data, size_t len) {
@@ -1138,6 +1144,7 @@ void SHA384_Final(sha2_byte digest[], SHA384_CTX* context) {
 
 	/* Zero out state data */
 	MEMSET_BZERO(context, sizeof(SHA384_CTX));
+	free(context);
 }
 
 char *SHA384_End(SHA384_CTX* context, char buffer[]) {

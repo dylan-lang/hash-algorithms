@@ -6,50 +6,26 @@ define library hash-algorithms
   use io;
   use c-ffi;
 
-  export hash-algorithms, md5, sha1, sha2;
+  export hash-algorithms;
 end library;
 
 define module hash-algorithms
   use dylan;
-  use common-dylan, import: { integer-to-string, <byte-vector> };
+  use common-dylan, exclude: { format-to-string };
+  use dylan-extensions, import: { <byte> };
+  use c-ffi;
+  use format-out;
 
   export
-    <hash>, context, context-setter,
+    <hash>, context,
     digest-size, block-size,
     update, digest,
     hexdigest;
-end;
-
-define module md5
-  use dylan;
-  use common-dylan, exclude: { format-to-string };
-  use dylan-extensions, import: { <byte> };
-  use format-out;
-  use c-ffi;
-  use hash-algorithms;
 
   export <md5>, md5;
-end module;
-
-define module sha1
-  use dylan;
-  use common-dylan, exclude: { format-to-string };
-  use dylan-extensions, import: { <byte> };
-  use format-out;
-  use c-ffi;
-  use hash-algorithms;
-
   export <sha1>, sha1;
-end module;
-
-define module sha2
-  use dylan;
-  use common-dylan, exclude: { format-to-string };
-  use dylan-extensions, import: { <byte> };
-  use format-out;
-  use c-ffi;
-  use hash-algorithms;
-
   export <sha256>, sha256;
-end module;
+  export <sha384>, sha384;
+  export <sha512>, sha512;
+end;
 

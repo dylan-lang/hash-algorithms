@@ -1,6 +1,6 @@
-module: sha2
+module: hash-algorithms
 
-define C-subtype <sha256-context> (<C-void*>) end;
+define hash sha256 (32; 64);
 
 define C-function init-sha256
   result context :: <sha256-context>;
@@ -20,44 +20,56 @@ define C-function final-sha256
   c-name: "SHA256_Final"
 end;
 
-define class <sha256> (<hash>)
-  inherited slot digest-size = 32;
-  inherited slot block-size = 64;
+define hash sha384 (48; 128);
+
+define C-function init-sha384
+  result context :: <sha384-context>;
+  c-name: "SHA384_Init"
 end;
 
-define method make (class == <sha256>, #next next-method,
-                    #rest rest, #key, #all-keys) => (hash :: <sha256>)
-  let result = next-method();
-  let ctx = init-sha256();
-  result.context := ctx;
-  result
+define C-function update-sha384
+  parameter context :: <sha384-context>;
+  parameter data :: <C-string>;
+  parameter length :: <C-int>;
+  c-name: "SHA384_Update"
 end;
 
-define method update (hash :: <sha256>, input :: <byte-string>) => ()
-  update-sha256(hash.context, as(<C-string>, input), input.size)
+define C-function final-sha384
+  parameter hash :: <C-string>;
+  parameter context :: <sha384-context>;
+  c-name: "SHA384_Final"
 end;
 
-define method digest (hash :: <sha256>) => (result :: <byte-vector>)
-  let res = make(<byte-vector>, size: 32);
-  with-stack-structure (c-hash :: <C-string>, size: 32, fill: ' ')
-    final-sha256(c-hash, hash.context);
-    for (x in c-hash, i from 0)
-      res[i] := as(<byte>, x);
-    end;
-  end;
-  res;
+define hash sha512 (64; 128);
+
+define C-function init-sha512
+  result context :: <sha512-context>;
+  c-name: "SHA512_Init"
 end;
 
-define function sha256 (input :: <byte-string>) => (result :: <byte-vector>)
-  let ctx = make(<sha256>);
-  update(ctx, input);
-  digest(ctx)
+define C-function update-sha512
+  parameter context :: <sha512-context>;
+  parameter data :: <C-string>;
+  parameter length :: <C-int>;
+  c-name: "SHA512_Update"
 end;
 
-define function main ()
+define C-function final-sha512
+  parameter hash :: <C-string>;
+  parameter context :: <sha512-context>;
+  c-name: "SHA512_Final"
+end;
+
+
+define method main ()
   let arg = application-arguments()[0];
-  let md = sha256(arg);
-  format-out("SHA256(%s): %s\n", arg, hexdigest(md))
+  let m = md5(arg);
+  let s1 = sha1(arg);
+  let s2 = sha256(arg);
+  let s3 = sha384(arg);
+  let s5 = sha512(arg);
+  format-out("string: %s\nMD5: %s\nSHA1: %s\nSHA256: %s\nSHA384: %s\nSHA512: %s\n",
+             arg, hexdigest(m), hexdigest(s1), hexdigest(s2), hexdigest(s3), hexdigest(s5));
 end;
 
 main();
