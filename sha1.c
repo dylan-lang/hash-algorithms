@@ -23,7 +23,39 @@
  * SUCH DAMAGE.
  */
 
-#include "sha.h"
+#include <stdlib.h>
+#include <string.h>
+//#include "sha.h"
+
+/* Define this if your machine is LITTLE_ENDIAN, otherwise #undef it: */
+#define LITTLE_ENDIAN
+
+/* Make sure you define these types for your architecture: */
+typedef unsigned int sha1_quadbyte;	/* 4 byte type */
+typedef unsigned char sha1_byte;	/* single byte type */
+
+/*
+ * Be sure to get the above definitions right.  For instance, on my
+ * x86 based FreeBSD box, I define LITTLE_ENDIAN and use the type
+ * "unsigned long" for the quadbyte.  On FreeBSD on the Alpha, however,
+ * while I still use LITTLE_ENDIAN, I must define the quadbyte type
+ * as "unsigned int" instead.
+ */
+
+#define SHA1_BLOCK_LENGTH	64
+#define SHA1_DIGEST_LENGTH	20
+
+/* The SHA1 structure: */
+typedef struct _SHA_CTX {
+	sha1_quadbyte	state[5];
+	sha1_quadbyte	count[2];
+	sha1_byte	buffer[SHA1_BLOCK_LENGTH];
+} SHA_CTX;
+
+//void SHA1_Init(SHA_CTX *context);
+//void SHA1_Update(SHA_CTX *context, sha1_byte *data, unsigned int len);
+//void SHA1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX* context);
+
 
 #define rol(value, bits) (((value) << (bits)) | ((value) >> (32 - (bits))))
 
@@ -97,7 +129,8 @@ void SHA1_Transform(sha1_quadbyte state[5], sha1_byte buffer[64]) {
 
 
 /* SHA1_Init - Initialize new context */
-void SHA1_Init(SHA_CTX* context) {
+SHA_CTX* SHA1_Init() {
+	SHA_CTX *context = malloc(sizeof(SHA_CTX));
 	/* SHA1 initialization constants */
 	context->state[0] = 0x67452301;
 	context->state[1] = 0xEFCDAB89;
@@ -105,6 +138,7 @@ void SHA1_Init(SHA_CTX* context) {
 	context->state[3] = 0x10325476;
 	context->state[4] = 0xC3D2E1F0;
 	context->count[0] = context->count[1] = 0;
+	return context;
 }
 
 /* Run your data through this. */
@@ -152,5 +186,7 @@ void SHA1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX *context) {
 	memset(context->state, 0, SHA1_DIGEST_LENGTH);
 	memset(context->count, 0, 8);
 	memset(&finalcount, 0, 8);
+	memset(context, 0, sizeof(*context));
+        free(context);
 }
 
