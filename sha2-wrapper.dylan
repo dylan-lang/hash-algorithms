@@ -60,7 +60,7 @@ define C-function final-sha512
   c-name: "SHA512_Final"
 end;
 
-
+/*
 define method main ()
   let arg = application-arguments()[0];
   let m = md5(arg);
@@ -74,4 +74,4 @@ end;
 
 main();
 
-
+*/
