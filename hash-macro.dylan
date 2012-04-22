@@ -18,7 +18,7 @@ define macro hash-definer
         result
       end;
 
-      define method update (hash :: "<" ## ?name ## ">", input :: <byte-string>) => ()
+      define method update-hash (hash :: "<" ## ?name ## ">", input :: <byte-string>) => ()
         "update-" ## ?name (hash.context, as(<C-string>, input), input.size)
       end;
 
@@ -35,7 +35,7 @@ define macro hash-definer
 
       define function ?name (input :: <byte-string>) => (result :: <byte-vector>)
         let ctx = make("<" ## ?name ## ">");
-        update(ctx, input);
+        update-hash(ctx, input);
         digest(ctx)
       end
 }

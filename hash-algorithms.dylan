@@ -6,7 +6,7 @@ define class <hash> (<object>)
   constant each-subclass slot block-size :: <integer>;
 end;
 
-define generic update (hash :: <hash>, input :: <byte-string>) => ();
+define generic update-hash (hash :: <hash>, input :: <byte-string>) => ();
 
 define generic digest (hash :: <hash>) => (result :: <byte-vector>);
 

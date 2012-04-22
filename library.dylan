@@ -17,7 +17,8 @@ define module hash-algorithms
   export
     <hash>,
     digest-size, block-size,
-    update, digest,
+    update-hash,
+    digest,
     hexdigest;
 
   export <md5>, md5;
