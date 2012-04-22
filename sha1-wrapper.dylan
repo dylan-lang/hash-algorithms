@@ -15,7 +15,7 @@ define C-function update-sha1
 end;
 
 define C-function final-sha1
-  parameter hash :: <C-string>;
+  parameter hash :: <C-unsigned-char*>;
   parameter context :: <sha1-context>;
   c-name: "SHA1_Final"
 end;

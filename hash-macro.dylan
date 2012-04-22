@@ -24,12 +24,12 @@ define macro hash-definer
 
       define method digest (hash :: "<" ## ?name ## ">") => (result :: <byte-vector>)
         let res = make(<byte-vector>, size: ?digest-size);
-        with-stack-structure (c-hash :: <C-string>, size: ?digest-size, fill: ' ')
-          "final-" ## ?name (c-hash, hash.context);
-          for (x in c-hash, i from 0)
-            res[i] := as(<byte>, x);
-          end;
+        let storage = make(<C-unsigned-char*>, element-count: ?digest-size);
+        "final-" ## ?name (storage, hash.context);
+        for (i from 0 below ?digest-size)
+          res[i] := as(<byte>, storage[i]);
         end;
+        destroy(storage);
         res;
       end;
 

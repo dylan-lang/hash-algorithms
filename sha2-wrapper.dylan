@@ -15,7 +15,7 @@ define C-function update-sha256
 end;
 
 define C-function final-sha256
-  parameter hash :: <C-string>;
+  parameter hash :: <C-unsigned-char*>;
   parameter context :: <sha256-context>;
   c-name: "SHA256_Final"
 end;
@@ -35,7 +35,7 @@ define C-function update-sha384
 end;
 
 define C-function final-sha384
-  parameter hash :: <C-string>;
+  parameter hash :: <C-unsigned-char*>;
   parameter context :: <sha384-context>;
   c-name: "SHA384_Final"
 end;
@@ -55,7 +55,7 @@ define C-function update-sha512
 end;
 
 define C-function final-sha512
-  parameter hash :: <C-string>;
+  parameter hash :: <C-unsigned-char*>;
   parameter context :: <sha512-context>;
   c-name: "SHA512_Final"
 end;

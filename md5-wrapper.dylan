@@ -15,7 +15,7 @@ define C-function update-md5
 end;
 
 define C-function final-md5
-  parameter hash :: <C-string>;
+  parameter hash :: <C-unsigned-char*>;
   parameter context :: <md5-context>;
   c-name: "MD5_Final"
 end;
