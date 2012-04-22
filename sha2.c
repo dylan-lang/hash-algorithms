@@ -123,20 +123,14 @@ typedef SHA512_CTX SHA384_CTX;
 void SHA256_Init(SHA256_CTX *);
 void SHA256_Update(SHA256_CTX*, const uint8_t*, size_t);
 void SHA256_Final(uint8_t[SHA256_DIGEST_LENGTH], SHA256_CTX*);
-char* SHA256_End(SHA256_CTX*, char[SHA256_DIGEST_STRING_LENGTH]);
-char* SHA256_Data(const uint8_t*, size_t, char[SHA256_DIGEST_STRING_LENGTH]);
 
 void SHA384_Init(SHA384_CTX*);
 void SHA384_Update(SHA384_CTX*, const uint8_t*, size_t);
 void SHA384_Final(uint8_t[SHA384_DIGEST_LENGTH], SHA384_CTX*);
-char* SHA384_End(SHA384_CTX*, char[SHA384_DIGEST_STRING_LENGTH]);
-char* SHA384_Data(const uint8_t*, size_t, char[SHA384_DIGEST_STRING_LENGTH]);
 
 void SHA512_Init(SHA512_CTX*);
 void SHA512_Update(SHA512_CTX*, const uint8_t*, size_t);
 void SHA512_Final(uint8_t[SHA512_DIGEST_LENGTH], SHA512_CTX*);
-char* SHA512_End(SHA512_CTX*, char[SHA512_DIGEST_STRING_LENGTH]);
-char* SHA512_Data(const uint8_t*, size_t, char[SHA512_DIGEST_STRING_LENGTH]);
 */
 
 /*
@@ -737,38 +731,6 @@ void SHA256_Final(sha2_byte digest[], SHA256_CTX* context) {
 	usedspace = 0;
 }
 
-char *SHA256_End(SHA256_CTX* context, char buffer[]) {
-	sha2_byte	digest[SHA256_DIGEST_LENGTH], *d = digest;
-	int		i;
-
-	/* Sanity check: */
-	assert(context != (SHA256_CTX*)0);
-
-	if (buffer != (char*)0) {
-		SHA256_Final(digest, context);
-
-		for (i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-			*buffer++ = sha2_hex_digits[(*d & 0xf0) >> 4];
-			*buffer++ = sha2_hex_digits[*d & 0x0f];
-			d++;
-		}
-		*buffer = (char)0;
-	} else {
-		MEMSET_BZERO(context, sizeof(SHA256_CTX));
-	}
-	MEMSET_BZERO(digest, SHA256_DIGEST_LENGTH);
-	return buffer;
-}
-
-char* SHA256_Data(const sha2_byte* data, size_t len, char digest[SHA256_DIGEST_STRING_LENGTH]) {
-	SHA256_CTX	context;
-
-	SHA256_Init(&context);
-	SHA256_Update(&context, data, len);
-	return SHA256_End(&context, digest);
-}
-
-
 /*** SHA-512: *********************************************************/
 SHA512_CTX* SHA512_Init() {
 	SHA512_CTX* context = malloc(sizeof(SHA512_CTX));
@@ -1069,38 +1031,6 @@ void SHA512_Final(sha2_byte digest[], SHA512_CTX* context) {
 	free(context);
 }
 
-char *SHA512_End(SHA512_CTX* context, char buffer[]) {
-	sha2_byte	digest[SHA512_DIGEST_LENGTH], *d = digest;
-	int		i;
-
-	/* Sanity check: */
-	assert(context != (SHA512_CTX*)0);
-
-	if (buffer != (char*)0) {
-		SHA512_Final(digest, context);
-
-		for (i = 0; i < SHA512_DIGEST_LENGTH; i++) {
-			*buffer++ = sha2_hex_digits[(*d & 0xf0) >> 4];
-			*buffer++ = sha2_hex_digits[*d & 0x0f];
-			d++;
-		}
-		*buffer = (char)0;
-	} else {
-		MEMSET_BZERO(context, sizeof(SHA512_CTX));
-	}
-	MEMSET_BZERO(digest, SHA512_DIGEST_LENGTH);
-	return buffer;
-}
-
-char* SHA512_Data(const sha2_byte* data, size_t len, char digest[SHA512_DIGEST_STRING_LENGTH]) {
-	SHA512_CTX	context;
-
-	SHA512_Init(&context);
-	SHA512_Update(&context, data, len);
-	return SHA512_End(&context, digest);
-}
-
-
 /*** SHA-384: *********************************************************/
 SHA384_CTX* SHA384_Init() {
 	SHA384_CTX* context = malloc(sizeof(SHA384_CTX));
@@ -1147,34 +1077,4 @@ void SHA384_Final(sha2_byte digest[], SHA384_CTX* context) {
 	free(context);
 }
 
-char *SHA384_End(SHA384_CTX* context, char buffer[]) {
-	sha2_byte	digest[SHA384_DIGEST_LENGTH], *d = digest;
-	int		i;
-
-	/* Sanity check: */
-	assert(context != (SHA384_CTX*)0);
-
-	if (buffer != (char*)0) {
-		SHA384_Final(digest, context);
-
-		for (i = 0; i < SHA384_DIGEST_LENGTH; i++) {
-			*buffer++ = sha2_hex_digits[(*d & 0xf0) >> 4];
-			*buffer++ = sha2_hex_digits[*d & 0x0f];
-			d++;
-		}
-		*buffer = (char)0;
-	} else {
-		MEMSET_BZERO(context, sizeof(SHA384_CTX));
-	}
-	MEMSET_BZERO(digest, SHA384_DIGEST_LENGTH);
-	return buffer;
-}
-
-char* SHA384_Data(const sha2_byte* data, size_t len, char digest[SHA384_DIGEST_STRING_LENGTH]) {
-	SHA384_CTX	context;
-
-	SHA384_Init(&context);
-	SHA384_Update(&context, data, len);
-	return SHA384_End(&context, digest);
-}
 
