@@ -54,6 +54,8 @@ define function sha1 (input :: <byte-string>) => (result :: <byte-vector>)
   digest(ctx)
 end;
 
+/*
+
 define function main ()
   let arg = application-arguments()[0];
   let md = sha1(arg);
@@ -62,5 +64,5 @@ end;
 
 main();
 
-
+*/
 
