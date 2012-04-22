@@ -60,18 +60,3 @@ define C-function final-sha512
   c-name: "SHA512_Final"
 end;
 
-/*
-define method main ()
-  let arg = application-arguments()[0];
-  let m = md5(arg);
-  let s1 = sha1(arg);
-  let s2 = sha256(arg);
-  let s3 = sha384(arg);
-  let s5 = sha512(arg);
-  format-out("string: %s\nMD5: %s\nSHA1: %s\nSHA256: %s\nSHA384: %s\nSHA512: %s\n",
-             arg, hexdigest(m), hexdigest(s1), hexdigest(s2), hexdigest(s3), hexdigest(s5));
-end;
-
-main();
-
-*/
