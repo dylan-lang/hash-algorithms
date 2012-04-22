@@ -37,9 +37,8 @@
 
 #ifndef HAVE_OPENSSL
 
+#include <stdlib.h>
 #include <string.h>
-
-//#include "md5.h"
 
 typedef unsigned int MD5_u32plus;
 
@@ -205,8 +204,9 @@ static void *body(MD5_CTX *ctx, void *data, unsigned long size)
 	return ptr;
 }
 
-void MD5_Init(MD5_CTX *ctx)
+MD5_CTX* MD5_Init()
 {
+	MD5_CTX *ctx = malloc(sizeof(MD5_CTX));
 	ctx->a = 0x67452301;
 	ctx->b = 0xefcdab89;
 	ctx->c = 0x98badcfe;
@@ -214,6 +214,7 @@ void MD5_Init(MD5_CTX *ctx)
 
 	ctx->lo = 0;
 	ctx->hi = 0;
+	return ctx;
 }
 
 void MD5_Update(MD5_CTX *ctx, void *data, unsigned long size)
@@ -252,22 +253,22 @@ void MD5_Update(MD5_CTX *ctx, void *data, unsigned long size)
 
 void MD5_Final(unsigned char *result, MD5_CTX *ctx)
 {
-	unsigned long used, free;
+	unsigned long used, mfree;
 
 	used = ctx->lo & 0x3f;
 
 	ctx->buffer[used++] = 0x80;
 
-	free = 64 - used;
+	mfree = 64 - used;
 
-	if (free < 8) {
-		memset(&ctx->buffer[used], 0, free);
+	if (mfree < 8) {
+		memset(&ctx->buffer[used], 0, mfree);
 		body(ctx, ctx->buffer, 64);
 		used = 0;
-		free = 64;
+		mfree = 64;
 	}
 
-	memset(&ctx->buffer[used], 0, free - 8);
+	memset(&ctx->buffer[used], 0, mfree - 8);
 
 	ctx->lo <<= 3;
 	ctx->buffer[56] = ctx->lo;
@@ -299,6 +300,7 @@ void MD5_Final(unsigned char *result, MD5_CTX *ctx)
 	result[15] = ctx->d >> 24;
 
 	memset(ctx, 0, sizeof(*ctx));
+	free(ctx);
 }
 
 #endif
