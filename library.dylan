@@ -17,7 +17,7 @@ define module hash-algorithms
   use format-out;
 
   export
-    <hash>, context,
+    <hash>,
     digest-size, block-size,
     update, digest,
     hexdigest;
