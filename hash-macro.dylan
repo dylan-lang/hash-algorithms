@@ -59,3 +59,14 @@ define macro hash-definer
 }
 end;
 
+//using md5.c
+define hash md5 (16; 64);
+
+//using sha1.c
+define hash sha1 (20; 64);
+
+//using sha2.c
+define hash sha256 (32; 64);
+define hash sha384 (48; 128);
+define hash sha512 (64; 128);
+
