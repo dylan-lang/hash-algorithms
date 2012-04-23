@@ -433,7 +433,7 @@ static const char *sha2_hex_digits = "0123456789abcdef";
 
 
 /*** SHA-256: *********************************************************/
-SHA256_CTX* SHA256_Init() {
+SHA256_CTX* sha256_Init() {
 	SHA256_CTX* context = malloc(sizeof(SHA256_CTX));
 	if (context == (SHA256_CTX*)0) {
 		return;
@@ -619,7 +619,7 @@ void SHA256_Transform(SHA256_CTX* context, const sha2_word32* data) {
 
 #endif /* SHA2_UNROLL_TRANSFORM */
 
-void SHA256_Update(SHA256_CTX* context, const sha2_byte *data, size_t len) {
+void sha256_Update(SHA256_CTX* context, const sha2_byte *data, size_t len) {
 	unsigned int	freespace, usedspace;
 
 	if (len == 0) {
@@ -667,7 +667,7 @@ void SHA256_Update(SHA256_CTX* context, const sha2_byte *data, size_t len) {
 	usedspace = freespace = 0;
 }
 
-void SHA256_Final(sha2_byte digest[], SHA256_CTX* context) {
+void sha256_Final(sha2_byte digest[], SHA256_CTX* context) {
 	sha2_word32	*d = (sha2_word32*)digest;
 	unsigned int	usedspace;
 
@@ -732,7 +732,7 @@ void SHA256_Final(sha2_byte digest[], SHA256_CTX* context) {
 }
 
 /*** SHA-512: *********************************************************/
-SHA512_CTX* SHA512_Init() {
+SHA512_CTX* sha512_Init() {
 	SHA512_CTX* context = malloc(sizeof(SHA512_CTX));
 	if (context == (SHA512_CTX*)0) {
 		return;
@@ -912,7 +912,7 @@ void SHA512_Transform(SHA512_CTX* context, const sha2_word64* data) {
 
 #endif /* SHA2_UNROLL_TRANSFORM */
 
-void SHA512_Update(SHA512_CTX* context, const sha2_byte *data, size_t len) {
+void sha512_Update(SHA512_CTX* context, const sha2_byte *data, size_t len) {
 	unsigned int	freespace, usedspace;
 
 	if (len == 0) {
@@ -1001,7 +1001,7 @@ void SHA512_Last(SHA512_CTX* context) {
 	SHA512_Transform(context, (sha2_word64*)context->buffer);
 }
 
-void SHA512_Final(sha2_byte digest[], SHA512_CTX* context) {
+void sha512_Final(sha2_byte digest[], SHA512_CTX* context) {
 	sha2_word64	*d = (sha2_word64*)digest;
 
 	/* Sanity check: */
@@ -1032,7 +1032,7 @@ void SHA512_Final(sha2_byte digest[], SHA512_CTX* context) {
 }
 
 /*** SHA-384: *********************************************************/
-SHA384_CTX* SHA384_Init() {
+SHA384_CTX* sha384_Init() {
 	SHA384_CTX* context = malloc(sizeof(SHA384_CTX));
 	if (context == (SHA384_CTX*)0) {
 		return;
@@ -1043,11 +1043,11 @@ SHA384_CTX* SHA384_Init() {
         return context;
 }
 
-void SHA384_Update(SHA384_CTX* context, const sha2_byte* data, size_t len) {
-	SHA512_Update((SHA512_CTX*)context, data, len);
+void sha384_Update(SHA384_CTX* context, const sha2_byte* data, size_t len) {
+	sha512_Update((SHA512_CTX*)context, data, len);
 }
 
-void SHA384_Final(sha2_byte digest[], SHA384_CTX* context) {
+void sha384_Final(sha2_byte digest[], SHA384_CTX* context) {
 	sha2_word64	*d = (sha2_word64*)digest;
 
 	/* Sanity check: */

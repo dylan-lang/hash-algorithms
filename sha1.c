@@ -129,7 +129,7 @@ void SHA1_Transform(sha1_quadbyte state[5], sha1_byte buffer[64]) {
 
 
 /* SHA1_Init - Initialize new context */
-SHA_CTX* SHA1_Init() {
+SHA_CTX* sha1_Init() {
 	SHA_CTX *context = malloc(sizeof(SHA_CTX));
 	/* SHA1 initialization constants */
 	context->state[0] = 0x67452301;
@@ -142,7 +142,7 @@ SHA_CTX* SHA1_Init() {
 }
 
 /* Run your data through this. */
-void SHA1_Update(SHA_CTX *context, sha1_byte *data, unsigned int len) {
+void sha1_Update(SHA_CTX *context, sha1_byte *data, unsigned int len) {
 	unsigned int	i, j;
 
 	j = (context->count[0] >> 3) & 63;
@@ -162,7 +162,7 @@ void SHA1_Update(SHA_CTX *context, sha1_byte *data, unsigned int len) {
 
 
 /* Add padding and return the message digest. */
-void SHA1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX *context) {
+void sha1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX *context) {
 	sha1_quadbyte	i, j;
 	sha1_byte	finalcount[8];
 
@@ -170,12 +170,12 @@ void SHA1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX *context) {
 	    finalcount[i] = (sha1_byte)((context->count[(i >= 4 ? 0 : 1)]
 	     >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
 	}
-	SHA1_Update(context, (sha1_byte *)"\200", 1);
+	sha1_Update(context, (sha1_byte *)"\200", 1);
 	while ((context->count[0] & 504) != 448) {
-	    SHA1_Update(context, (sha1_byte *)"\0", 1);
+	    sha1_Update(context, (sha1_byte *)"\0", 1);
 	}
 	/* Should cause a SHA1_Transform() */
-	SHA1_Update(context, finalcount, 8);
+	sha1_Update(context, finalcount, 8);
 	for (i = 0; i < SHA1_DIGEST_LENGTH; i++) {
 	    digest[i] = (sha1_byte)
 	     ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);

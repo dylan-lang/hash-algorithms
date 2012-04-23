@@ -5,6 +5,24 @@ define macro hash-definer
     {
       define C-subtype "<" ## ?name ## "-context>" (<C-void*>) end;
 
+      define C-function "init-" ## ?name
+        result context :: "<" ## ?name ## "-context>";
+        c-name: ?"name" ## "_Init"
+      end;
+
+      define C-function "update-" ## ?name
+        parameter context :: "<" ## ?name ## "-context>";
+        parameter data :: <C-string>;
+        parameter length :: <C-int>;
+        c-name: ?"name" ## "_Update"
+      end;
+
+      define C-function "final-" ## ?name
+        parameter hash :: <C-unsigned-char*>;
+        parameter context :: "<" ## ?name ## "-context>";
+        c-name: ?"name" ## "_Final"
+      end;
+
       define class "<" ## ?name ## ">" (<hash>)
         inherited slot digest-size = ?digest-size;
         inherited slot block-size = ?block-size;

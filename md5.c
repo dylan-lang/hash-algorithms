@@ -204,7 +204,7 @@ static void *body(MD5_CTX *ctx, void *data, unsigned long size)
 	return ptr;
 }
 
-MD5_CTX* MD5_Init()
+MD5_CTX* md5_Init()
 {
 	MD5_CTX *ctx = malloc(sizeof(MD5_CTX));
 	ctx->a = 0x67452301;
@@ -217,7 +217,7 @@ MD5_CTX* MD5_Init()
 	return ctx;
 }
 
-void MD5_Update(MD5_CTX *ctx, void *data, unsigned long size)
+void md5_Update(MD5_CTX *ctx, void *data, unsigned long size)
 {
 	MD5_u32plus saved_lo;
 	unsigned long used, free;
@@ -251,7 +251,7 @@ void MD5_Update(MD5_CTX *ctx, void *data, unsigned long size)
 	memcpy(ctx->buffer, data, size);
 }
 
-void MD5_Final(unsigned char *result, MD5_CTX *ctx)
+void md5_Final(unsigned char *result, MD5_CTX *ctx)
 {
 	unsigned long used, mfree;
 
