@@ -1,5 +1,5 @@
 library: hash-algorithms
-Target-Type:   dll
+Target-Type: dll
 files: library
   hash-algorithms
   hash-macro
