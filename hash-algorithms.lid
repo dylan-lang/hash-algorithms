@@ -1,5 +1,5 @@
 library: hash-algorithms
-executable: hash-algorithms
+Target-Type:   dll
 files: library
   hash-algorithms
   hash-macro
