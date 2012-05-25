@@ -24,6 +24,7 @@ define module hash-algorithms
   export <md5>, md5;
   export <sha1>, sha1;
   export <sha256>, sha256;
+  export <sha224>, sha224;
   export <sha384>, sha384;
   export <sha512>, sha512;
 end;

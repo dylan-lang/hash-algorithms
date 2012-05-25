@@ -67,6 +67,7 @@ define hash sha1 (20; 64);
 
 //using sha2.c
 define hash sha256 (32; 64);
+define hash sha224 (28; 64);
 define hash sha384 (48; 128);
 define hash sha512 (64; 128);
 

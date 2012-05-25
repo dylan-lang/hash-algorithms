@@ -53,6 +53,9 @@
 #define SHA256_BLOCK_LENGTH		64
 #define SHA256_DIGEST_LENGTH		32
 #define SHA256_DIGEST_STRING_LENGTH	(SHA256_DIGEST_LENGTH * 2 + 1)
+#define SHA224_BLOCK_LENGTH		64
+#define SHA224_DIGEST_LENGTH		28
+#define SHA224_DIGEST_STRING_LENGTH	(SHA224_DIGEST_LENGTH * 2 + 1)
 #define SHA384_BLOCK_LENGTH		128
 #define SHA384_DIGEST_LENGTH		48
 #define SHA384_DIGEST_STRING_LENGTH	(SHA384_DIGEST_LENGTH * 2 + 1)
@@ -115,8 +118,9 @@ typedef struct _SHA512_CTX {
 
 #endif /* SHA2_USE_INTTYPES_H */
 
-typedef SHA512_CTX SHA384_CTX;
+typedef SHA256_CTX SHA224_CTX;
 
+typedef SHA512_CTX SHA384_CTX;
 
 /*** SHA-256/384/512 Function Prototypes ******************************/
 /*
@@ -221,6 +225,7 @@ typedef u_int64_t sha2_word64;	/* Exactly 8 bytes */
 /*** SHA-256/384/512 Various Length Definitions ***********************/
 /* NOTE: Most of these are in sha2.h */
 #define SHA256_SHORT_BLOCK_LENGTH	(SHA256_BLOCK_LENGTH - 8)
+#define SHA224_SHORT_BLOCK_LENGTH	(SHA224_BLOCK_LENGTH - 8)
 #define SHA384_SHORT_BLOCK_LENGTH	(SHA384_BLOCK_LENGTH - 16)
 #define SHA512_SHORT_BLOCK_LENGTH	(SHA512_BLOCK_LENGTH - 16)
 
@@ -355,6 +360,18 @@ const static sha2_word32 sha256_initial_hash_value[8] = {
 	0x9b05688cUL,
 	0x1f83d9abUL,
 	0x5be0cd19UL
+};
+
+/* Initial hash value H for SHA-224: */
+const static sha2_word32 sha224_initial_hash_value[8] = {
+	0xc1059ed8UL,
+	0x367cd507UL,
+	0x3070dd17UL,
+	0xf70e5939UL,
+	0xffc00b31UL,
+	0x68581511UL,
+	0x64f98fa7UL,
+	0xbefa4fa4UL
 };
 
 /* Hash constant words K for SHA-384 and SHA-512: */
@@ -729,6 +746,84 @@ void sha256_Final(sha2_byte digest[], SHA256_CTX* context) {
 	MEMSET_BZERO(context, sizeof(SHA256_CTX));
 	free(context);
 	usedspace = 0;
+}
+
+/*** SHA224 *********************************************************/
+SHA224_CTX* sha224_Init() {
+	SHA224_CTX* context = malloc(sizeof(SHA224_CTX));
+	if (context == (SHA224_CTX*)0) {
+		return;
+	}
+	MEMCPY_BCOPY(context->state, sha224_initial_hash_value, SHA256_DIGEST_LENGTH);
+	MEMSET_BZERO(context->buffer, SHA224_BLOCK_LENGTH);
+	context->bitcount = 0;
+        return context;
+}
+
+void sha224_Update(SHA224_CTX* context, const sha2_byte* data, size_t len) {
+	sha256_Update((SHA256_CTX*)context, data, len);
+}
+
+void sha224_Final(sha2_byte digest[], SHA224_CTX* context) {
+	sha2_word32	*d = (sha2_word32*)digest;
+	unsigned int	usedspace;
+
+	/* Sanity check: */
+	assert(context != (SHA224_CTX*)0);
+
+	if (digest != (sha2_byte*)0) {
+		usedspace = (context->bitcount >> 3) % SHA224_BLOCK_LENGTH;
+#if BYTE_ORDER == LITTLE_ENDIAN
+		/* Convert FROM host byte order */
+		REVERSE64(context->bitcount,context->bitcount);
+#endif
+		if (usedspace > 0) {
+			/* Begin padding with a 1 bit: */
+			context->buffer[usedspace++] = 0x80;
+
+			if (usedspace <= SHA224_SHORT_BLOCK_LENGTH) {
+				/* Set-up for the last transform: */
+				MEMSET_BZERO(&context->buffer[usedspace], SHA224_SHORT_BLOCK_LENGTH - usedspace);
+			} else {
+				if (usedspace < SHA224_BLOCK_LENGTH) {
+					MEMSET_BZERO(&context->buffer[usedspace], SHA224_BLOCK_LENGTH - usedspace);
+				}
+				/* Do second-to-last transform: */
+				SHA256_Transform(context, (sha2_word32*)context->buffer);
+
+				/* And set-up for the last transform: */
+				MEMSET_BZERO(context->buffer, SHA224_SHORT_BLOCK_LENGTH);
+			}
+		} else {
+			/* Set-up for the last transform: */
+			MEMSET_BZERO(context->buffer, SHA224_SHORT_BLOCK_LENGTH);
+
+			/* Begin padding with a 1 bit: */
+			*context->buffer = 0x80;
+		}
+		/* Set the bit count: */
+		*(sha2_word64*)&context->buffer[SHA224_SHORT_BLOCK_LENGTH] = context->bitcount;
+
+		/* Final transform: */
+		SHA256_Transform(context, (sha2_word32*)context->buffer);
+
+#if BYTE_ORDER == LITTLE_ENDIAN
+		{
+			/* Convert TO host byte order */
+			int	j;
+			for (j = 0; j < 7; j++) {
+				REVERSE32(context->state[j],context->state[j]);
+				*d++ = context->state[j];
+			}
+		}
+#else
+		MEMCPY_BCOPY(d, context->state, SHA224_DIGEST_LENGTH);
+#endif
+	}
+
+	/* Zero out state data */
+	MEMSET_BZERO(context, sizeof(SHA224_CTX));
+	free(context);
 }
 
 /*** SHA-512: *********************************************************/
