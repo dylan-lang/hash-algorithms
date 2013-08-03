@@ -452,9 +452,6 @@ static const char *sha2_hex_digits = "0123456789abcdef";
 /*** SHA-256: *********************************************************/
 SHA256_CTX* sha256_Init() {
 	SHA256_CTX* context = malloc(sizeof(SHA256_CTX));
-	if (context == (SHA256_CTX*)0) {
-		return;
-	}
 	MEMCPY_BCOPY(context->state, sha256_initial_hash_value, SHA256_DIGEST_LENGTH);
 	MEMSET_BZERO(context->buffer, SHA256_BLOCK_LENGTH);
 	context->bitcount = 0;
@@ -751,9 +748,6 @@ void sha256_Final(sha2_byte digest[], SHA256_CTX* context) {
 /*** SHA224 *********************************************************/
 SHA224_CTX* sha224_Init() {
 	SHA224_CTX* context = malloc(sizeof(SHA224_CTX));
-	if (context == (SHA224_CTX*)0) {
-		return;
-	}
 	MEMCPY_BCOPY(context->state, sha224_initial_hash_value, SHA256_DIGEST_LENGTH);
 	MEMSET_BZERO(context->buffer, SHA224_BLOCK_LENGTH);
 	context->bitcount = 0;
@@ -829,9 +823,6 @@ void sha224_Final(sha2_byte digest[], SHA224_CTX* context) {
 /*** SHA-512: *********************************************************/
 SHA512_CTX* sha512_Init() {
 	SHA512_CTX* context = malloc(sizeof(SHA512_CTX));
-	if (context == (SHA512_CTX*)0) {
-		return;
-	}
 	MEMCPY_BCOPY(context->state, sha512_initial_hash_value, SHA512_DIGEST_LENGTH);
 	MEMSET_BZERO(context->buffer, SHA512_BLOCK_LENGTH);
 	context->bitcount[0] = context->bitcount[1] =  0;
@@ -1129,9 +1120,6 @@ void sha512_Final(sha2_byte digest[], SHA512_CTX* context) {
 /*** SHA-384: *********************************************************/
 SHA384_CTX* sha384_Init() {
 	SHA384_CTX* context = malloc(sizeof(SHA384_CTX));
-	if (context == (SHA384_CTX*)0) {
-		return;
-	}
 	MEMCPY_BCOPY(context->state, sha384_initial_hash_value, SHA512_DIGEST_LENGTH);
 	MEMSET_BZERO(context->buffer, SHA384_BLOCK_LENGTH);
 	context->bitcount[0] = context->bitcount[1] = 0;
