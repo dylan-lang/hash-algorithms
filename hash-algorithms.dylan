@@ -1,4 +1,6 @@
 module: hash-algorithms
+author: Hannes Mehnert
+copyright: See LICENSE file in this distribution.
 
 define class <hash> (<object>)
   /* constant */ slot context, init-keyword: context:;

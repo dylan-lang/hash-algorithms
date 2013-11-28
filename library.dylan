@@ -1,4 +1,6 @@
 module: dylan-user
+author: Hannes Mehnert
+copyright: See LICENSE file in this distribution.
 
 define library hash-algorithms
   use dylan;

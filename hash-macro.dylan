@@ -1,4 +1,6 @@
 module: hash-algorithms
+author: Hannes Mehnert
+copyright: See LICENSE file in this distribution.
 
 define macro hash-definer
   { define hash ?:name (?digest-size:expression; ?block-size:expression) } =>
