@@ -1,4 +1,6 @@
 module: hash-algorithms-test
+author: Hannes Mehnert
+copyright: See LICENSE file in this distribution.
 
 define constant test-0 = "abc";
 define constant test-0a = "fff";
