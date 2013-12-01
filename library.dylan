@@ -14,6 +14,7 @@ define module hash-algorithms
   use dylan;
   use common-dylan, exclude: { format-to-string };
   use dylan-extensions, import: { <byte> };
+  use dylan-primitives;
   use c-ffi;
 
   export

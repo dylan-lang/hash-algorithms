@@ -2,6 +2,19 @@ module: hash-algorithms
 author: Hannes Mehnert
 copyright: See LICENSE file in this distribution.
 
+define simple-C-mapped-subtype <C-buffer-offset> (<C-void*>)
+  export-map <machine-word>, export-function: identity;
+end;
+
+define function buffer-offset
+    (the-buffer, data-offset :: <integer>)
+ => (result-offset :: <machine-word>)
+  u%+(data-offset,
+      primitive-wrap-machine-word
+        (primitive-repeated-slot-as-raw
+           (the-buffer, primitive-repeated-slot-offset(the-buffer))))
+end function;
+
 define macro hash-definer
   { define hash ?:name (?digest-size:expression; ?block-size:expression) } =>
     {
@@ -14,13 +27,13 @@ define macro hash-definer
 
       define C-function "update-" ## ?name
         parameter context :: "<" ## ?name ## "-context>";
-        parameter data :: <C-string>;
+        parameter data :: <C-buffer-offset>;
         parameter length :: <C-int>;
         c-name: ?"name" ## "_Update"
       end;
 
       define C-function "final-" ## ?name
-        parameter hash :: <C-unsigned-char*>;
+        parameter hash :: <C-buffer-offset>;
         parameter context :: "<" ## ?name ## "-context>";
         c-name: ?"name" ## "_Final"
       end;
@@ -38,18 +51,13 @@ define macro hash-definer
         result
       end;
 
-      define method update-hash (hash :: "<" ## ?name ## ">", input :: <byte-string>) => ()
-        "update-" ## ?name (hash.context, as(<C-string>, input), input.size)
+      define method update-hash (hash :: "<" ## ?name ## ">", input) => ()
+        "update-" ## ?name (hash.context, buffer-offset(input, 0), input.size)
       end;
 
       define method digest (hash :: "<" ## ?name ## ">") => (result :: <byte-vector>)
         let res = make(<byte-vector>, size: ?digest-size);
-        let storage = make(<C-unsigned-char*>, element-count: ?digest-size);
-        "final-" ## ?name (storage, hash.context);
-        for (i from 0 below ?digest-size)
-          res[i] := as(<byte>, storage[i]);
-        end;
-        destroy(storage);
+        "final-" ## ?name (buffer-offset(res, 0), hash.context);
         res;
       end;
 
