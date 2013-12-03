@@ -61,7 +61,7 @@ define macro hash-definer
         res;
       end;
 
-      define function ?name (input :: <byte-string>) => (result :: <byte-vector>)
+      define function ?name (input) => (result :: <byte-vector>)
         let ctx = make("<" ## ?name ## ">");
         update-hash(ctx, input);
         digest(ctx)
