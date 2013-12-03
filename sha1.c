@@ -5,6 +5,9 @@
  * 
  * Modified by Aaron D. Gifford <agifford@infowest.com>
  *
+ * Also modified by Bruce Mitchener to copy data rather than trash it.
+ * using code from the original version by Steve Reid.
+ *
  * NO COPYRIGHT - THIS IS 100% IN THE PUBLIC DOMAIN
  *
  * The original unmodified version is available at:
@@ -89,7 +92,10 @@ void SHA1_Transform(sha1_quadbyte state[5], sha1_byte buffer[64]) {
 	sha1_quadbyte	a, b, c, d, e;
 	BYTE64QUAD16	*block;
 
-	block = (BYTE64QUAD16*)buffer;
+	static unsigned char workspace[64];
+	block = (BYTE64QUAD16*)workspace;
+	memcpy(block, buffer, 64);
+
 	/* Copy context->state[] to working vars */
 	a = state[0];
 	b = state[1];
@@ -188,5 +194,7 @@ void sha1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX *context) {
 	memset(&finalcount, 0, 8);
 	memset(context, 0, sizeof(*context));
         free(context);
+	/* make SHA1_Transform overwrite it's own static vars */
+	SHA1_Transform(context->state, context->buffer);
 }
 
