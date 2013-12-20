@@ -2,18 +2,9 @@ module: hash-algorithms
 author: Hannes Mehnert
 copyright: See LICENSE file in this distribution.
 
-define simple-C-mapped-subtype <C-buffer-offset> (<C-void*>)
+define simple-C-mapped-subtype <C-buffer-offset> (<C-char*>)
   export-map <machine-word>, export-function: identity;
 end;
-
-define function buffer-offset
-    (the-buffer, data-offset :: <integer>)
- => (result-offset :: <machine-word>)
-  u%+(data-offset,
-      primitive-wrap-machine-word
-        (primitive-repeated-slot-as-raw
-           (the-buffer, primitive-repeated-slot-offset(the-buffer))))
-end function;
 
 define macro hash-definer
   { define hash ?:name (?digest-size:expression; ?block-size:expression) } =>
@@ -52,12 +43,12 @@ define macro hash-definer
       end;
 
       define method update-hash (hash :: "<" ## ?name ## ">", input) => ()
-        "update-" ## ?name (hash.context, buffer-offset(input, 0), input.size)
+        "update-" ## ?name (hash.context, byte-storage-offset-address(input, 0), input.size)
       end;
 
       define method digest (hash :: "<" ## ?name ## ">") => (result :: <byte-vector>)
         let res = make(<byte-vector>, size: ?digest-size);
-        "final-" ## ?name (buffer-offset(res, 0), hash.context);
+        "final-" ## ?name (byte-storage-offset-address(res, 0), hash.context);
         res;
       end;
 
