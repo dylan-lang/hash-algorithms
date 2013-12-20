@@ -2,7 +2,7 @@ module: hash-algorithms
 author: Hannes Mehnert
 copyright: See LICENSE file in this distribution.
 
-define simple-C-mapped-subtype <C-buffer-offset> (<C-char*>)
+define simple-C-mapped-subtype <C-buffer-offset> (<C-void*>)
   export-map <machine-word>, export-function: identity;
 end;
 
