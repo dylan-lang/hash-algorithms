@@ -43,12 +43,12 @@ define macro hash-definer
       end;
 
       define method update-hash (hash :: "<" ## ?name ## ">", input) => ()
-        "update-" ## ?name (hash.context, byte-storage-offset-address(input, 0), input.size)
+        "update-" ## ?name (hash.context, byte-storage-address(input), input.size)
       end;
 
       define method digest (hash :: "<" ## ?name ## ">") => (result :: <byte-vector>)
         let res = make(<byte-vector>, size: ?digest-size);
-        "final-" ## ?name (byte-storage-offset-address(res, 0), hash.context);
+        "final-" ## ?name (byte-storage-address(res), hash.context);
         res;
       end;
 
