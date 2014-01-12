@@ -193,8 +193,8 @@ void sha1_Final(sha1_byte digest[SHA1_DIGEST_LENGTH], SHA_CTX *context) {
 	memset(context->count, 0, 8);
 	memset(&finalcount, 0, 8);
 	memset(context, 0, sizeof(*context));
-        free(context);
 	/* make SHA1_Transform overwrite it's own static vars */
 	SHA1_Transform(context->state, context->buffer);
+	free(context);
 }
 
