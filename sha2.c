@@ -42,6 +42,10 @@
  */
 #include <sys/types.h>
 
+#ifdef OPEN_DYLAN_PLATFORM_WINDOWS
+#define SHA2_USE_INTTYPES_H
+#endif // OPEN_DYLAN_PLATFORM_WINDOWS
+
 #ifdef SHA2_USE_INTTYPES_H
 
 #include <inttypes.h>
