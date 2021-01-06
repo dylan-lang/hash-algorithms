@@ -97,19 +97,3 @@ define test sha512-test ()
   check-equal("SHA512 of 7", "97FB4EC472F3CB698B9C3C12A12768483E5B62BCDAD934280750B4FA4701E5E0550A80BB0828342C19631BA55A55E1CEE5DE2FDA91FC5D40E7BEE1D4E6D415B3", hexdigest(sha512(test-7)));
   check-equal("SHA512 of 8", "D399507BBF5F2D0DA51DB1FF1FC51C1C9FF1DE0937E00D01693B240E84FCC3400601429F45C297ACC6E8FCF1E4E4ABE9FF21A54A0D3D88888F298971BD206CD5", hexdigest(sha512(test-8)));
 end;
-
-
-
-define suite hash-algorithms-test-suite ()
-  test md5-test;
-  test sha1-test;
-  test sha256-test;
-  test sha224-test;
-  test sha384-test;
-  test sha512-test;
-end;
-
-begin
-  run-test-application(hash-algorithms-test-suite)
-end;
-
