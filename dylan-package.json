@@ -1,0 +1,10 @@
+{
+    "description": "SHA-1 and SHA-2 hashing",
+    "name": "hash-algorithms",
+    "version": "1.1.0",
+    "dependencies": [],
+    "dev-dependencies": [
+        "testworks"
+    ],
+    "url": "https://github.com/dylan-lang/hash-algorithms"
+}
