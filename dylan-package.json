@@ -4,6 +4,7 @@
     "version": "1.1.0",
     "dependencies": [],
     "dev-dependencies": [
+        "sphinx-extensions",
         "testworks"
     ],
     "url": "https://github.com/dylan-lang/hash-algorithms"

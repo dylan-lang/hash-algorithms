@@ -1,4 +1,4 @@
-module: hash-algorithms-test
+module: hash-algorithms-test-suite
 author: Hannes Mehnert
 copyright: See LICENSE file in this distribution.
 

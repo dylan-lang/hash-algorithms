@@ -1,7 +1,7 @@
 hash-algorithms
 ===============
 
-A small library providing hash algorithms for the `Dylan programming`_
+A library providing hash algorithms for the `Dylan programming`_
 language. It currently provides:
 
 * md5
@@ -11,7 +11,6 @@ language. It currently provides:
 * sha384
 * sha512
 
-Documentation can be found in the Open Dylan `library reference`_.
-
-.. _Dylan programming: http://opendylan.org/
-.. _library reference: http://opendylan.org/documentation/library-reference/
+Documentation can be viewed in source form in the ``documentation`` directory,
+or on `opendylan.org
+<https://opendylan.org/package/hash-algorithms/index.html>`_.

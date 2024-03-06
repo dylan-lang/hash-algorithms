@@ -12,7 +12,7 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../ext/sphinx-extensions/sphinxcontrib'))
+sys.path.insert(0, os.path.abspath('../../_packages/sphinx-extensions/current/src/sphinxcontrib'))
 import dylan.themes as dylan_themes
 
 
@@ -44,31 +44,10 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build']
 
-# This makes it so that each document doesn't have to use
-#   .. default-domain:: dylan
-# but they probably should anyway, so that they can be built separately
-# without depending on this top-level config file.
 primary_domain = 'dylan'
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-html_theme = dylan_themes.get_html_theme_default()
-
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-html_theme_options = dylan_themes.get_html_theme_options_default()
-
-# Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = [dylan_themes.get_html_theme_path()]
-
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 html_title = "Hash Algorithms"
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
