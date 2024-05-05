@@ -1,0 +1,39 @@
+#
+# Build documentation and checklinks.
+#
+# This action don't include deploy since it fails in PR.
+#
+name: Build and checklinks docs
+
+on:
+  pull_request:
+    # all branches
+    paths:
+      - 'documentation/**/*.rst'
+      - 'documentation/**/conf.py'
+
+  # This enables the Run Workflow button on the Actions tab.
+  workflow_dispatch:
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check links
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/fraya/dylan-docs
+          options: -v ${{ github.workspace }}/documentation:/docs
+          run: make linkcheck
+
+      - name: Build docs with Furo theme
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/fraya/dylan-docs
+          options: -v ${{ github.workspace }}/documentation:/docs
+          run: make html

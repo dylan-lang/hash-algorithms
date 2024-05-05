@@ -51,3 +51,8 @@ primary_domain = 'dylan'
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 html_title = "Hash Algorithms"
+
+html_theme = 'furo'
+
+# Ignore certification verification
+tls_verify = False
