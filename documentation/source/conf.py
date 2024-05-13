@@ -52,7 +52,7 @@ primary_domain = 'dylan'
 # "<project> v<release> documentation".
 html_title = "Hash Algorithms"
 
-html_theme = 'furo'
+html_theme = 'furo'             # https://pradyunsg.me/furo/customisation/
 
 # Ignore certification verification
 tls_verify = False

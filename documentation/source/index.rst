@@ -1,6 +1,6 @@
-***************************
-The hash-algorithms Library
-***************************
+***************
+hash-algorithms
+***************
 
 .. current-library:: hash-algorithms
 .. current-module:: hash-algorithms
@@ -20,13 +20,14 @@ after each hash:
 
 .. code-block:: dylan
 
-    let digest = sha1("Some text");
+    sha1("Some text");  // => {<simple-byte-vector> sequence 2, 217, 44, 88, 13, 78, ... }
 
 If you want a printable digest, use :meth:`hexdigest(<byte-vector>)`:
 
 .. code-block:: dylan
 
-    let hexdigest = hexdigest(sha1("Some text"));
+    hexdigest(sha1("Some text"))
+    // => "02D92C580D4EDE6C80A878BDD9F3142D8F757BE8"
 
 If you want to hash multiple strings into a single digest (useful when streaming),
 you can use the :gf:`update-hash` and :gf:`digest` functions:
@@ -37,9 +38,8 @@ you can use the :gf:`update-hash` and :gf:`digest` functions:
     update-hash(hash, "Some");
     update-hash(hash, " ");
     update-hash(hash, "text");
-    let digest = digest(hash);
-    // hexdigest works on hashes as well:
-    let hexdigest = hexdigest(hash);
+    digest(hash);     // => {<simple-byte-vector> sequence 2, 217, 44, 88, 13, 78, 222, ...}
+    hexdigest(hash);  // => "EA1C208EFBF629C89F52D165045B1716EA8EB012"
 
 The hash-algorithms Module
 ==========================
@@ -80,7 +80,7 @@ The hash-algorithms Module
       Add more data to the hash. This is useful when streaming data or the data is
       available in multiple strings and you wish to avoid the overhead of concatenation.
 
-      Calling ``update-hash`` multiple times is equivalent to calling it once with
+      Calling :gf:`update-hash` multiple times is equivalent to calling it once with
       a concatenation of the arguments:
 
       .. code-block:: dylan
@@ -89,13 +89,13 @@ The hash-algorithms Module
         update-hash(hash-separate, "Some");
         update-hash(hash-separate, " ");
         update-hash(hash-separate, "text");
-        let digest-separate = digest(hash-separate);
+        digest(hash-separate);
+        // => {<simple-byte-vector> sequence 2, 217, 44, 88, 13, 78, 222, ... }
 
         let hash-combined = make(<sha1>);
         update-hash(hash-combined, "Some text");
-        let digest-combined = digest(hash-combined);
-
-        // digest-separate and digest-combined will be the same
+        digest(hash-combined);
+        // => {<simple-byte-vector> sequence 2, 217, 44, 88, 13, 78, 222, ... }
 
    :seealso:
 

@@ -1,11 +1,12 @@
 {
     "description": "SHA-1 and SHA-2 hashing",
     "name": "hash-algorithms",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "dependencies": [],
     "dev-dependencies": [
         "sphinx-extensions",
         "testworks"
     ],
-    "url": "https://github.com/dylan-lang/hash-algorithms"
+    "url": "https://github.com/dylan-lang/hash-algorithms",
+    "license-url": "https://github.com/dylan-lang/hash-algorithms/blob/master/LICENSE"
 }
