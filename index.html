@@ -187,8 +187,8 @@
           </label>
         </div>
         <article role="main">
-          <section id="the-hash-algorithms-library">
-<h1>The hash-algorithms Library<a class="headerlink" href="#the-hash-algorithms-library" title="Permalink to this heading">#</a></h1>
+          <section id="hash-algorithms">
+<h1>hash-algorithms<a class="headerlink" href="#hash-algorithms" title="Permalink to this heading">#</a></h1>
 <p>The hash-algorithms library provides consistent access to a variety of
 hash algorithms:</p>
 <ul class="simple">
@@ -201,11 +201,12 @@ hash algorithms:</p>
 </ul>
 <p>Hashing an entire string at once can be done via the functions named
 after each hash:</p>
-<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">let</span><span class="w"> </span><span class="n">digest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sha1</span><span class="p">(</span><span class="s">&quot;Some text&quot;</span><span class="p">);</span>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">sha1</span><span class="p">(</span><span class="s">&quot;Some text&quot;</span><span class="p">);</span><span class="w">  </span><span class="c1">// =&gt; {&lt;simple-byte-vector&gt; sequence 2, 217, 44, 88, 13, 78, ... }</span>
 </pre></div>
 </div>
 <p>If you want a printable digest, use <a class="reference internal" href="#hash-algorithms:hash-algorithms:hexdigest([byte-vector])"><code class="xref dylan dylan-meth docutils literal notranslate"><span class="pre">hexdigest(&lt;byte-vector&gt;)</span></code></a>:</p>
-<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">let</span><span class="w"> </span><span class="n">hexdigest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hexdigest</span><span class="p">(</span><span class="n">sha1</span><span class="p">(</span><span class="s">&quot;Some text&quot;</span><span class="p">));</span>
+<div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="n">hexdigest</span><span class="p">(</span><span class="n">sha1</span><span class="p">(</span><span class="s">&quot;Some text&quot;</span><span class="p">))</span>
+<span class="c1">// =&gt; &quot;02D92C580D4EDE6C80A878BDD9F3142D8F757BE8&quot;</span>
 </pre></div>
 </div>
 <p>If you want to hash multiple strings into a single digest (useful when streaming),
@@ -214,9 +215,8 @@ you can use the <a class="reference internal" href="#hash-algorithms:hash-algori
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Some&quot;</span><span class="p">);</span>
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span>
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;text&quot;</span><span class="p">);</span>
-<span class="k">let</span><span class="w"> </span><span class="n">digest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digest</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span>
-<span class="c1">// hexdigest works on hashes as well:</span>
-<span class="k">let</span><span class="w"> </span><span class="n">hexdigest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hexdigest</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span>
+<span class="n">digest</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span><span class="w">     </span><span class="c1">// =&gt; {&lt;simple-byte-vector&gt; sequence 2, 217, 44, 88, 13, 78, 222, ...}</span>
+<span class="n">hexdigest</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span><span class="w">  </span><span class="c1">// =&gt; &quot;EA1C208EFBF629C89F52D165045B1716EA8EB012&quot;</span>
 </pre></div>
 </div>
 <section id="the-hash-algorithms-module">
@@ -290,19 +290,19 @@ you can use the <a class="reference internal" href="#hash-algorithms:hash-algori
 <dt class="field-odd">Discussion<span class="colon">:</span></dt>
 <dd class="field-odd"><p><p>Add more data to the hash. This is useful when streaming data or the data is
 available in multiple strings and you wish to avoid the overhead of concatenation.</p>
-<p>Calling <code class="docutils literal notranslate"><span class="pre">update-hash</span></code> multiple times is equivalent to calling it once with
+<p>Calling <a class="reference internal" href="#hash-algorithms:hash-algorithms:update-hash"><code class="xref dylan dylan-gf docutils literal notranslate"><span class="pre">update-hash</span></code></a> multiple times is equivalent to calling it once with
 a concatenation of the arguments:</p>
 <div class="highlight-dylan notranslate"><div class="highlight"><pre><span></span><span class="k">let</span><span class="w"> </span><span class="n">hash-separate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;sha1&gt;</span><span class="p">);</span>
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash-separate</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Some&quot;</span><span class="p">);</span>
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash-separate</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="p">);</span>
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash-separate</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;text&quot;</span><span class="p">);</span>
-<span class="k">let</span><span class="w"> </span><span class="n">digest-separate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digest</span><span class="p">(</span><span class="n">hash-separate</span><span class="p">);</span>
+<span class="n">digest</span><span class="p">(</span><span class="n">hash-separate</span><span class="p">);</span>
+<span class="c1">// =&gt; {&lt;simple-byte-vector&gt; sequence 2, 217, 44, 88, 13, 78, 222, ... }</span>
 
 <span class="k">let</span><span class="w"> </span><span class="n">hash-combined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="nc">&lt;sha1&gt;</span><span class="p">);</span>
 <span class="n">update-hash</span><span class="p">(</span><span class="n">hash-combined</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Some text&quot;</span><span class="p">);</span>
-<span class="k">let</span><span class="w"> </span><span class="n">digest-combined</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">digest</span><span class="p">(</span><span class="n">hash-combined</span><span class="p">);</span>
-
-<span class="c1">// digest-separate and digest-combined will be the same</span>
+<span class="n">digest</span><span class="p">(</span><span class="n">hash-combined</span><span class="p">);</span>
+<span class="c1">// =&gt; {&lt;simple-byte-vector&gt; sequence 2, 217, 44, 88, 13, 78, 222, ... }</span>
 </pre></div>
 </div>
 </p>
@@ -638,7 +638,7 @@ this result in text form, use <a class="reference internal" href="#hash-algorith
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">The hash-algorithms Library</a><ul>
+<li><a class="reference internal" href="#">hash-algorithms</a><ul>
 <li><a class="reference internal" href="#the-hash-algorithms-module">The hash-algorithms Module</a><ul>
 <li><a class="reference internal" href="#md5">MD5</a></li>
 <li><a class="reference internal" href="#sha-1">SHA-1</a></li>
